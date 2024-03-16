@@ -1,6 +1,6 @@
 pipeline {
     agent {
-        label 'maven-node'
+        label 'Maven'
     }
     tools {
         maven 'Maven'
