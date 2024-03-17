@@ -21,7 +21,6 @@ pipeline {
             steps {
                 sh 'mvn test'
                 stash(name: 'packaged_code', includes: 'target/*.war, Dockerfile')
-
             }
         }
         stage('Dockerize') {
