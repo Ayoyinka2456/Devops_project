@@ -20,7 +20,7 @@ pipeline {
         stage('Test') {
             steps {
                 sh 'mvn test'
-                stash(name: 'packaged_code', includes: 'target/*.war, Dockerfile',)
+                stash(name: 'packaged_code')
             }
         }
         stage('Dockerize') {
