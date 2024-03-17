@@ -4,14 +4,13 @@ pipeline {
     }
     tools {
         maven 'Maven'
-        jdk 'Java'
+        jdk 'Java11'
     }
     stages {
 
         stage('Checkout') {
             steps {
-                git branch: 'project-1', url: 'https://github.com/Ayoyinka2456/Devops_project.git'
-                // git 'https://github.com/Ayoyinka2456/Jenkins-pipeline1.git'
+                git 'https://github.com/Ayoyinka2456/Devops_project.git'
             }
         }
         stage('Build') {
@@ -26,23 +25,24 @@ pipeline {
                 stash(name: 'packaged_code', includes: 'target/*.war')
             }
         }
-        stage('Deploy to Tomcat') {
+        stage('Dockerize') {
             agent {
-                label 'Tomcat'
+                label 'Docker'
             }
             steps {
+                sh "sudo rm -rf ~/*"
+                sh "sudo docker stop JavaAppContainer && sudo docker rm JavaAppContainer"
+                sh "sudo docker rmi JavaApp"
+
+                sh "export EC2_PUBLIC_IP=$(curl -s http://169.254.169.254/latest/meta-data/public-ipv4)"
+                sh "cd ~/"
                 unstash 'packaged_code'
-                sh "sudo rm -rf ~/apache*/webapp/*.war"
-                sh "sudo mv target/*.war ~/apache*/webapps/"
-                sh "sudo ~/apache*/bin/shutdown.sh && sudo ~/apache*/bin/startup.sh"
+                sh "wget 'https://github.com/Ayoyinka2456/Devops_project/blob/project-1/Dockerfile'"
+                sh "sudo mv target/*.war ~/"
+                sh "sudo docker build -t JavaApp ."
+                sh "sudo docker run -itd -p 8081:8080 --name JavaAppContainer JavaApp"
+                sh "curl http://$EC2_PUBLIC_IP:8081"
             }
         }
-    }
-        post{
-            always {
-                emailext body: 'Check console output at $BUILD_URL to view the results.', 
-                subject: '$PROJECT_NAME - Build # $BUILD_NUMBER - $BUILD_STATUS!', 
-                to: 'eas.adeyemi@gmail.com'
-            }
-        }     
-    }
+    }    
+}
