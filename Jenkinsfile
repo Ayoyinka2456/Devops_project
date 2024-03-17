@@ -34,7 +34,7 @@ pipeline {
                 sh "sudo docker stop JavaAppContainer && sudo docker rm JavaAppContainer"
                 sh "sudo docker rmi JavaApp"
 
-                sh "export EC2_PUBLIC_IP=$(curl -s http://169.254.169.254/latest/meta-data/public-ipv4)"
+                sh "export EC2_PUBLIC_IP=\$(curl -s http://169.254.169.254/latest/meta-data/public-ipv4)"
                 sh "cd ~/"
                 unstash 'packaged_code'
                 sh "wget 'https://github.com/Ayoyinka2456/Devops_project/blob/test/Dockerfile'"
