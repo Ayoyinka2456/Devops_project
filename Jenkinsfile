@@ -20,7 +20,8 @@ pipeline {
         stage('Test') {
             steps {
                 sh 'mvn test'
-                stash(name: 'packaged_code')
+                stash(name: 'packaged_code', includes: 'target/*.war, Dockerfile')
+
             }
         }
         stage('Dockerize') {
@@ -29,7 +30,7 @@ pipeline {
             }
             steps {
                 echo "Deleting Dockerfile and target folder"
-                sh "sudo rm -rf Dockerfile target/"
+                //sh "sudo rm -rf Dockerfile target/"
 
                 echo "Stopping and removing existing container (if any)"
                 sh "sudo docker stop java_container || true"  
@@ -43,7 +44,8 @@ pipeline {
 
                 dir("~") {
                     echo "Unstashing packaged code"
-                    unstash 'packaged_code'
+                    //unstash 'packaged_code'
+                    unstash(name: 'packaged_code', force: true)
 
                     echo "Building Docker image"
                     sh "sudo docker build -t java_app ."
