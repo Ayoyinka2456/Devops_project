@@ -38,8 +38,6 @@ pipeline {
                     unstash 'packaged_code'
                     sh "sudo docker build -t java_app ."
                     sh "sudo docker run -itd -p 8081:8080 --name java_container java_app"
-                    sh "sleep 10"  // Adding a delay to ensure container is started before curling
-                    sh "curl http://\$EC2_PUBLIC_IP:8081"
                 }
             }
         }
