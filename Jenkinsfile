@@ -20,7 +20,7 @@ pipeline {
         stage('Test') {
             steps {
                 sh 'mvn test'
-                stash(name: 'packaged_code', includes: 'target/*.war')
+                stash(name: 'packaged_code', includes: 'target/*.war, Dockerfile')
             }
         }
         stage('Dockerize') {
@@ -28,7 +28,7 @@ pipeline {
                 label 'Docker'
             }
             steps {
-                sh "sudo rm -rf target"
+                sh "sudo rm -rf Dockerfile target/"
                 sh "sudo docker stop java_container || true"  // Use "|| true" to prevent pipeline failure if container does not exist
                 sh "sudo docker rm java_container || true"    // Use "|| true" to prevent pipeline failure if container does not exist
                 sh "sudo docker rmi java_app || true"           // Use "|| true" to prevent pipeline failure if image does not exist
