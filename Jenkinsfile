@@ -28,7 +28,7 @@ pipeline {
                 label 'Docker'
             }
             steps {
-                sh "sudo rm -rf ~/*"
+                sh "sudo rm -rf target"
                 sh "sudo docker stop JavaAppContainer || true"  // Use "|| true" to prevent pipeline failure if container does not exist
                 sh "sudo docker rm JavaAppContainer || true"    // Use "|| true" to prevent pipeline failure if container does not exist
                 sh "sudo docker rmi JavaApp || true"           // Use "|| true" to prevent pipeline failure if image does not exist
