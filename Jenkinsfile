@@ -101,8 +101,8 @@ pipeline {
                         mv increment_counter.sh ../
                         mv docker_login.sh ../
                         cd ../
-                        source ../increment_counter.sh
-                        source ../docker_login.sh
+                        ./increment_counter.sh
+                        ./docker_login.sh
                         rm -rf ../temp_folder
                     ''', returnStdout: true).trim()
 
