@@ -96,8 +96,9 @@ pipeline {
                         git clone -b test --single-branch https://github.com/Ayoyinka2456/Devops_project.git temp_folder
                         cd temp_folder
                         git archive HEAD increment_counter.sh docker_login.sh | tar -x
-                        mv increment_counter.sh docker_login.sh ../
-                        cd ..
+                        mv increment_counter.sh ../
+                        mv docker_login.sh ../
+                        cd ../
                         source increment_counter.sh
                         source docker_login.sh
                         rm -rf temp_folder
