@@ -133,8 +133,7 @@ pipeline {
 
                         echo "Running Docker container"
                         // sh "sudo docker run -itd -p 8081:8080 --name java_container java_app"
-                        sh "sudo docker run -itd -p 8081:8080 --name java_container $DOCKER_USERNAME/java_app:$COUNTER
-"
+                        sh "sudo docker run -itd -p 8081:8080 --name java_container $DOCKER_USERNAME/java_app:$COUNTER"
                     }
                 }
             }
