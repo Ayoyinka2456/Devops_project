@@ -90,6 +90,8 @@ pipeline {
             }
             steps {
                 script {
+                    echo "Deleting Dockerfile and target folder"
+                    sh "sudo rm -rf *"
 
                     echo "Import specific files from repo"
                     def gitCloneOutput = sh(script: '''
@@ -107,8 +109,6 @@ pipeline {
                     if (gitCloneOutput.contains("fatal") || gitCloneOutput.contains("error")) {
                         error "Failed to import specific files from the repository. Details: $gitCloneOutput"
                     }
-                    echo "Deleting Dockerfile and target folder"
-                    sh "sudo rm -rf Dockerfile target/"
 
                     echo "Stopping and removing existing container (if any)"
                     sh "sudo docker stop java_container || true"  
