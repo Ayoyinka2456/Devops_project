@@ -92,23 +92,23 @@ pipeline {
                 script {
                     echo "Deleting Dockerfile and target folder"
                     sh "sudo rm -rf *"
-
+                    
                     echo "Import specific files from repo"
                     def gitCloneOutput = sh(script: '''
-                        git clone -b test --single-branch https://github.com/Ayoyinka2456/Devops_project.git temp_folder
+                        git clone -b test --single-branch -q https://github.com/Ayoyinka2456/Devops_project.git temp_folder
                         cd temp_folder
-                        git archive HEAD increment_counter.sh docker_login.sh | tar -x
                         mv increment_counter.sh ../
                         mv docker_login.sh ../
                         cd ../
-                        ./increment_counter.sh
-                        ./docker_login.sh
-                        rm -rf ../temp_folder
-                    ''', returnStdout: true).trim()
-
-                    if (gitCloneOutput.contains("fatal") || gitCloneOutput.contains("error")) {
-                        error "Failed to import specific files from the repository. Details: $gitCloneOutput"
+                        source increment_counter.sh
+                        source docker_login.sh
+                        rm -rf temp_folder
+                    ''', returnStatus: true).trim()
+                    
+                    if (gitCloneOutput != 0) {
+                        error "Failed to import specific files from the repository. Git clone command returned status: $gitCloneOutput"
                     }
+
 
                     echo "Stopping and removing existing container (if any)"
                     sh "sudo docker stop java_container || true"  
