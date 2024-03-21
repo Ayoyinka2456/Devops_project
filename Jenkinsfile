@@ -109,8 +109,9 @@ pipeline {
                     }
 
                     echo "Running cloned shell files"
-                    sh "/home/centos/workspace/Basic\ Java\ Deployment/increment_counter.sh"
-                    sh "/home/centos/workspace/Basic\ Java\ Deployment/docker_login.sh"
+                    sh "/home/centos/workspace/Basic Java Deployment/increment_counter.sh"
+                    sh "/home/centos/workspace/Basic Java Deployment/docker_login.sh"
+
                 
 
                     echo "Stopping and removing existing container (if any)"
