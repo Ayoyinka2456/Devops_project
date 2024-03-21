@@ -90,7 +90,7 @@ pipeline {
             }
             steps {
                 script {
-                    echo "Deleting Dockerfile and target folder"
+                    echo "Deleting all files in folder"
                     sh "sudo rm -rf *"
 
                     echo "Import specific files from repo"
@@ -109,10 +109,8 @@ pipeline {
                     }
 
                     echo "Running cloned shell files"
-                    sh "/home/centos/workspace/Basic Java Deployment/increment_counter.sh"
-                    sh "/home/centos/workspace/Basic Java Deployment/docker_login.sh"
-
-                
+                    sh "/home/centos/workspace/BasicJavaDeployment/increment_counter.sh"
+                    sh "/home/centos/workspace/BasicJavaDeployment/docker_login.sh"                
 
                     echo "Stopping and removing existing container (if any)"
                     sh "sudo docker stop java_container || true"  
@@ -123,8 +121,6 @@ pipeline {
 
                     echo "Exporting EC2_PUBLIC_IP"
                     sh "export EC2_PUBLIC_IP=\$(curl -s http://169.254.169.254/latest/meta-data/public-ipv4)"
-
-
 
                     dir("~") {
                         echo "Unstashing packaged code"
