@@ -126,16 +126,17 @@ pipeline {
                         echo "Unstashing packaged code"
                         unstash 'packaged_code'
 
-                        echo "Building Docker image"
-                        sh "sudo docker build -t $DOCKER_USERNAME/java_app:$COUNTER ."
-
-                        echo "Push Docker image"
-                        sh "sudo docker push $DOCKER_USERNAME/java_app:$COUNTER ."
-
-                        echo "Running Docker container"
-                        // sh "sudo docker run -itd -p 8081:8080 --name java_container java_app"
-                        sh "sudo docker run -itd -p 8081:8080 --name java_container $DOCKER_USERNAME/java_app:$COUNTER"
+                        script {
+                            sh '''
+                                sudo chmod +x /home/centos/workspace/BasicJavaDeployment/increment_counter.sh && source /home/centos/workspace/BasicJavaDeployment/increment_counter.sh
+                                sudo chmod +x /home/centos/workspace/BasicJavaDeployment/docker_login.sh && source /home/centos/workspace/BasicJavaDeployment/docker_login.sh
+                                sudo docker build -t $DOCKER_USERNAME/java_app:$COUNTER .
+                                sudo docker push $DOCKER_USERNAME/java_app:$COUNTER .
+                                sudo docker run -itd -p 8081:8080 --name java_container $DOCKER_USERNAME/java_app:$COUNTER
+                            '''
+                        }
                     }
+
                 }
             }
         }
