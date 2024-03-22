@@ -63,6 +63,9 @@ pipeline {
     agent {
         label 'Maven'
     }
+    environment {
+        DOCKER_USERNAME = 'ayoyinka'
+    }
     tools {
         maven 'Maven'
         jdk 'Java'
