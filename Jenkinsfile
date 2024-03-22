@@ -108,10 +108,6 @@ pipeline {
                         error "Failed to import specific files from the repository. Details: $gitCloneOutput"
                     }
 
-                    echo "Running cloned shell files"
-                    sh "sudo chmod +x /home/centos/workspace/BasicJavaDeployment/increment_counter.sh && source /home/centos/workspace/BasicJavaDeployment/increment_counter.sh"
-                    sh "sudo chmod +x /home/centos/workspace/BasicJavaDeployment/docker_login.sh && source /home/centos/workspace/BasicJavaDeployment/docker_login.sh"
-            
                     echo "Stopping and removing existing container (if any)"
                     sh "sudo docker stop java_container || true"  
                     sh "sudo docker rm java_container || true"    
@@ -131,7 +127,7 @@ pipeline {
                                 sudo chmod +x /home/centos/workspace/BasicJavaDeployment/increment_counter.sh && source /home/centos/workspace/BasicJavaDeployment/increment_counter.sh
                                 sudo chmod +x /home/centos/workspace/BasicJavaDeployment/docker_login.sh && source /home/centos/workspace/BasicJavaDeployment/docker_login.sh
                                 sudo docker build -t $DOCKER_USERNAME/java_app:$COUNTER .
-                                sudo docker push $DOCKER_USERNAME/java_app:$COUNTER .
+                                sudo docker push $DOCKER_USERNAME/java_app:$COUNTER
                                 sudo docker run -itd -p 8081:8080 --name java_container $DOCKER_USERNAME/java_app:$COUNTER
                             '''
                         }
