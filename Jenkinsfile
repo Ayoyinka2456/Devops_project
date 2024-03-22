@@ -127,6 +127,7 @@ pipeline {
                                 sudo chmod +x /home/centos/workspace/BasicJavaDeployment/increment_counter.sh && source /home/centos/workspace/BasicJavaDeployment/increment_counter.sh
                                 sudo chmod +x /home/centos/workspace/BasicJavaDeployment/docker_login.sh && source /home/centos/workspace/BasicJavaDeployment/docker_login.sh
                                 sudo docker build -t $DOCKER_USERNAME/java_app:$COUNTER .
+                                sudo docker login -u "$DOCKER_USERNAME" -p "$DOCKER_PSWD"
                                 sudo docker push $DOCKER_USERNAME/java_app:$COUNTER
                                 sudo docker run -itd -p 8081:8080 --name java_container $DOCKER_USERNAME/java_app:$COUNTER
                             '''
