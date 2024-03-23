@@ -139,7 +139,6 @@ pipeline {
                         echo "Unstashing packaged code"
                         unstash 'packaged_code'
                         sh '''
-                            sudo chmod +x /home/centos/workspace/BasicJavaDeployment/increment_counter.sh && source /home/centos/workspace/BasicJavaDeployment/increment_counter.sh
                             echo "$DOCKERHUB_CREDENTIALS_USR"
                             sudo docker build -t $DOCKERHUB_CREDENTIALS_USR/java_app:$counter .
                             sudo docker login -u "$DOCKERHUB_CREDENTIALS_USR" -p "$DOCKERHUB_CREDENTIALS_PSW"
