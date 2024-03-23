@@ -36,26 +36,6 @@ pipeline {
                     echo "Deleting all files in folder"
                     sh "sudo rm -rf *"
                     
-                    // def counter = 1
-                    // try {
-                    //     counter = readFile('counter.txt').toInteger() + 1
-                    // } catch (Exception e) {
-                    //     // If the file doesn't exist, counter will be initialized to 1
-                    // }
-                    // def counter = 1
-                    // try {
-                    //     counter = readFile('counter.txt').toInteger() + 1
-                    //     echo "Counter read from file: $counter"
-                    // } catch (Exception e) {
-                    //     // If the file doesn't exist, counter will be initialized to 1
-                    //     echo "Counter file not found, initializing to 1"
-                    // }
-                    
-                    // echo "Counter before Docker build: $counter"
-                    
-                    // // Rest of the script
-
-                    
                     echo "Stopping and removing existing container (if any)"
                     sh "sudo docker stop java_container || true"  
                     sh "sudo docker rm java_container || true"    
@@ -66,18 +46,6 @@ pipeline {
                     echo "Exporting EC2_PUBLIC_IP"
                     sh "export EC2_PUBLIC_IP=\$(curl -s http://169.254.169.254/latest/meta-data/public-ipv4)"
 
-                    // dir("~") {
-                    //     echo "Unstashing packaged code"
-                    //     unstash 'packaged_code'
-                    //     sh '''
-                    //         echo "$DOCKERHUB_CREDENTIALS_USR"
-                    //         sudo docker build -t $DOCKERHUB_CREDENTIALS_USR/java_app:$counter .
-                    //         sudo docker login -u "$DOCKERHUB_CREDENTIALS_USR" -p "$DOCKERHUB_CREDENTIALS_PSW"
-                    //         sudo docker push $DOCKERHUB_CREDENTIALS_USR/java_app:$counter
-                    //         sudo docker run -itd -p 8081:8080 --name java_container $DOCKERHUB_CREDENTIALS_USR/java_app:$counter
-                    //     '''
-                    // }
-                    // writeFile file: 'counter.txt', text: counter.toString()
                     dir("~") {
                         echo "Unstashing packaged code"
                         unstash 'packaged_code'
