@@ -62,8 +62,6 @@ pipeline {
                     dir("~") {
                         echo "Unstashing packaged code"
                         unstash 'packaged_code'
-                        echo "$COUNTER"
-
                         script {
                             sh '''
                                 sudo chmod +x /home/centos/workspace/BasicJavaDeployment/increment_counter.sh && source /home/centos/workspace/BasicJavaDeployment/increment_counter.sh
@@ -74,8 +72,6 @@ pipeline {
                                 sudo docker run -itd -p 8081:8080 --name java_container $DOCKERHUB_CREDENTIALS_USR/java_app:$COUNTER
                             '''
                         }
-                        ((COUNTER++))
-                        echo "$COUNTER"
                     }
 
                 }
