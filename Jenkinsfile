@@ -118,12 +118,25 @@ pipeline {
                     echo "Deleting all files in folder"
                     sh "sudo rm -rf *"
                     
+                    // def counter = 1
+                    // try {
+                    //     counter = readFile('counter.txt').toInteger() + 1
+                    // } catch (Exception e) {
+                    //     // If the file doesn't exist, counter will be initialized to 1
+                    // }
                     def counter = 1
                     try {
                         counter = readFile('counter.txt').toInteger() + 1
+                        echo "Counter read from file: $counter"
                     } catch (Exception e) {
                         // If the file doesn't exist, counter will be initialized to 1
+                        echo "Counter file not found, initializing to 1"
                     }
+                    
+                    echo "Counter before Docker build: $counter"
+                    
+                    // Rest of the script
+
                     
                     echo "Stopping and removing existing container (if any)"
                     sh "sudo docker stop java_container || true"  
