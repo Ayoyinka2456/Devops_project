@@ -67,13 +67,13 @@ pipeline {
                             sh '''
                                 sudo chmod +x /home/centos/workspace/BasicJavaDeployment/increment_counter.sh && source /home/centos/workspace/BasicJavaDeployment/increment_counter.sh
                                 echo "$DOCKERHUB_CREDENTIALS_USR"
+                                echo "$COUNTER"
                                 sudo docker build -t $DOCKERHUB_CREDENTIALS_USR/java_app:$COUNTER .
                                 sudo docker login -u "$DOCKERHUB_CREDENTIALS_USR" -p "$DOCKERHUB_CREDENTIALS_PSW"
-                                echo "$COUNTER"
-                                ((COUNTER++))
-                                echo "$COUNTER"
                                 sudo docker push $DOCKERHUB_CREDENTIALS_USR/java_app:$COUNTER
                                 sudo docker run -itd -p 8081:8080 --name java_container $DOCKERHUB_CREDENTIALS_USR/java_app:$COUNTER
+                                ((COUNTER++))
+                                echo "$COUNTER"
                             '''
                         }
                     }
