@@ -81,7 +81,6 @@
 // }
 
 
-
 pipeline {
     agent {
         label 'Maven'
@@ -118,8 +117,14 @@ pipeline {
                 script {
                     echo "Deleting all files in folder"
                     sh "sudo rm -rf *"
-                    def counter = sh(script: 'cat counter.txt', returnStdout: true).trim().toInteger() + 1
-
+                    
+                    def counter = 1
+                    try {
+                        counter = readFile('counter.txt').toInteger() + 1
+                    } catch (Exception e) {
+                        // If the file doesn't exist, counter will be initialized to 1
+                    }
+                    
                     echo "Stopping and removing existing container (if any)"
                     sh "sudo docker stop java_container || true"  
                     sh "sudo docker rm java_container || true"    
@@ -133,21 +138,19 @@ pipeline {
                     dir("~") {
                         echo "Unstashing packaged code"
                         unstash 'packaged_code'
-                        script {
-                            sh '''
-                                sudo chmod +x /home/centos/workspace/BasicJavaDeployment/increment_counter.sh && source /home/centos/workspace/BasicJavaDeployment/increment_counter.sh
-                                echo "$DOCKERHUB_CREDENTIALS_USR"
-                                sudo docker build -t $DOCKERHUB_CREDENTIALS_USR/java_app:$counter .
-                                sudo docker login -u "$DOCKERHUB_CREDENTIALS_USR" -p "$DOCKERHUB_CREDENTIALS_PSW"
-                                sudo docker push $DOCKERHUB_CREDENTIALS_USR/java_app:$counter
-                                sudo docker run -itd -p 8081:8080 --name java_container $DOCKERHUB_CREDENTIALS_USR/java_app:$counter
-                            '''
-                        }
+                        sh '''
+                            sudo chmod +x /home/centos/workspace/BasicJavaDeployment/increment_counter.sh && source /home/centos/workspace/BasicJavaDeployment/increment_counter.sh
+                            echo "$DOCKERHUB_CREDENTIALS_USR"
+                            sudo docker build -t $DOCKERHUB_CREDENTIALS_USR/java_app:$counter .
+                            sudo docker login -u "$DOCKERHUB_CREDENTIALS_USR" -p "$DOCKERHUB_CREDENTIALS_PSW"
+                            sudo docker push $DOCKERHUB_CREDENTIALS_USR/java_app:$counter
+                            sudo docker run -itd -p 8081:8080 --name java_container $DOCKERHUB_CREDENTIALS_USR/java_app:$counter
+                        '''
                     }
-                    sh "echo $counter > counter.txt"
-
+                    writeFile file: 'counter.txt', text: counter.toString()
                 }
             }
         }
     }
 }
+
