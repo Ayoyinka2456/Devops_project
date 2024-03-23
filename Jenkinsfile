@@ -69,6 +69,9 @@ pipeline {
                                 echo "$DOCKERHUB_CREDENTIALS_USR"
                                 sudo docker build -t $DOCKERHUB_CREDENTIALS_USR/java_app:$COUNTER .
                                 sudo docker login -u "$DOCKERHUB_CREDENTIALS_USR" -p "$DOCKERHUB_CREDENTIALS_PSW"
+                                echo "$COUNTER"
+                                ((COUNTER++))
+                                echo "$COUNTER"
                                 sudo docker push $DOCKERHUB_CREDENTIALS_USR/java_app:$COUNTER
                                 sudo docker run -itd -p 8081:8080 --name java_container $DOCKERHUB_CREDENTIALS_USR/java_app:$COUNTER
                             '''
