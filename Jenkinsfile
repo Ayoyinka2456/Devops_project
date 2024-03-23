@@ -176,13 +176,15 @@ pipeline {
                         }
                     
                         // Perform Docker-related operations
-                        sh '''
-                            echo "$DOCKERHUB_CREDENTIALS_USR"
-                            sudo docker build -t $DOCKERHUB_CREDENTIALS_USR/java_app:$counter .
-                            sudo docker login -u "$DOCKERHUB_CREDENTIALS_USR" -p "$DOCKERHUB_CREDENTIALS_PSW"
-                            sudo docker push $DOCKERHUB_CREDENTIALS_USR/java_app:$counter
-                            sudo docker run -itd -p 8081:8080 --name java_container $DOCKERHUB_CREDENTIALS_USR/java_app:$counter
-                        '''
+                        sh """
+                            echo "${DOCKERHUB_CREDENTIALS_USR}"
+                            counter=${counter}
+                            sudo docker build -t ${DOCKERHUB_CREDENTIALS_USR}/java_app:\$counter .
+                            sudo docker login -u "${DOCKERHUB_CREDENTIALS_USR}" -p "${DOCKERHUB_CREDENTIALS_PSW}"
+                            sudo docker push ${DOCKERHUB_CREDENTIALS_USR}/java_app:\$counter
+                            sudo docker run -itd -p 8081:8080 --name java_container ${DOCKERHUB_CREDENTIALS_USR}/java_app:\$counter
+                        """
+
                     
                         // Write the updated counter back to the file
                         writeFile file: 'counter.txt', text: counter.toString()
