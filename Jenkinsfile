@@ -124,18 +124,18 @@ pipeline {
                     // } catch (Exception e) {
                     //     // If the file doesn't exist, counter will be initialized to 1
                     // }
-                    def counter = 1
-                    try {
-                        counter = readFile('counter.txt').toInteger() + 1
-                        echo "Counter read from file: $counter"
-                    } catch (Exception e) {
-                        // If the file doesn't exist, counter will be initialized to 1
-                        echo "Counter file not found, initializing to 1"
-                    }
+                    // def counter = 1
+                    // try {
+                    //     counter = readFile('counter.txt').toInteger() + 1
+                    //     echo "Counter read from file: $counter"
+                    // } catch (Exception e) {
+                    //     // If the file doesn't exist, counter will be initialized to 1
+                    //     echo "Counter file not found, initializing to 1"
+                    // }
                     
-                    echo "Counter before Docker build: $counter"
+                    // echo "Counter before Docker build: $counter"
                     
-                    // Rest of the script
+                    // // Rest of the script
 
                     
                     echo "Stopping and removing existing container (if any)"
@@ -148,9 +148,34 @@ pipeline {
                     echo "Exporting EC2_PUBLIC_IP"
                     sh "export EC2_PUBLIC_IP=\$(curl -s http://169.254.169.254/latest/meta-data/public-ipv4)"
 
+                    // dir("~") {
+                    //     echo "Unstashing packaged code"
+                    //     unstash 'packaged_code'
+                    //     sh '''
+                    //         echo "$DOCKERHUB_CREDENTIALS_USR"
+                    //         sudo docker build -t $DOCKERHUB_CREDENTIALS_USR/java_app:$counter .
+                    //         sudo docker login -u "$DOCKERHUB_CREDENTIALS_USR" -p "$DOCKERHUB_CREDENTIALS_PSW"
+                    //         sudo docker push $DOCKERHUB_CREDENTIALS_USR/java_app:$counter
+                    //         sudo docker run -itd -p 8081:8080 --name java_container $DOCKERHUB_CREDENTIALS_USR/java_app:$counter
+                    //     '''
+                    // }
+                    // writeFile file: 'counter.txt', text: counter.toString()
                     dir("~") {
                         echo "Unstashing packaged code"
                         unstash 'packaged_code'
+                    
+                        // Initialize counter to 1
+                        def counter = 1
+                        try {
+                            // Attempt to read counter from file and increment it
+                            counter = readFile('counter.txt').toInteger() + 1
+                            echo "Counter read from file: $counter"
+                        } catch (Exception e) {
+                            // If the file doesn't exist or is empty, initialize counter to 1
+                            echo "Counter file not found or empty, initializing to 1"
+                        }
+                    
+                        // Perform Docker-related operations
                         sh '''
                             echo "$DOCKERHUB_CREDENTIALS_USR"
                             sudo docker build -t $DOCKERHUB_CREDENTIALS_USR/java_app:$counter .
@@ -158,8 +183,11 @@ pipeline {
                             sudo docker push $DOCKERHUB_CREDENTIALS_USR/java_app:$counter
                             sudo docker run -itd -p 8081:8080 --name java_container $DOCKERHUB_CREDENTIALS_USR/java_app:$counter
                         '''
+                    
+                        // Write the updated counter back to the file
+                        writeFile file: 'counter.txt', text: counter.toString()
                     }
-                    writeFile file: 'counter.txt', text: counter.toString()
+
                 }
             }
         }
