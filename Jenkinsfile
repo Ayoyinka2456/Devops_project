@@ -13,7 +13,7 @@ pipeline {
         stage('Checkout') {
             steps {
                 echo "Cleaning workspace..."
-                SH "whoami"
+                sh "whoami"
                 sh "sudo rm -rf *"
                 sh "ls && pwd"
                 git branch: 'project-1', url: 'https://github.com/Ayoyinka2456/Devops_project.git'
