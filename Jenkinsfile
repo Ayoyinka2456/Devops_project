@@ -1,6 +1,6 @@
 pipeline {
     agent {
-        label 'any'  // Node label where Docker is available
+        label 'Jenkins_Server'  // Node label where Docker is available
     }
 
     environment {
