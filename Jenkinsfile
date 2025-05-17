@@ -1,7 +1,7 @@
 pipeline {
-    // agent {
-    //     label 'any'  // Node label where Docker is available
-    // }
+    agent {
+        label 'any'  // Node label where Docker is available
+    }
 
     environment {
         DOCKERHUB_CREDENTIALS = credentials('docker_login') // Jenkins credentials ID
