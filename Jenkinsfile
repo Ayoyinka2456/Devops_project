@@ -21,6 +21,10 @@ pipeline {
         stage('Dockerize') {
             steps {
                 script {
+                    sh "sudo docker ps -a"
+                    sh "sudo docker images ls -a"
+                    sh "whoami"
+                    echo "Im here"
                     echo "Stopping and removing any old container named java_container"
                     sh "docker stop java_container || true"
                     sh "docker rm java_container || true"
@@ -38,6 +42,7 @@ pipeline {
                     }
 
                     // Build, push, and run Docker image
+                                        
                     sh """
                         echo "Dockerhub Username: ${DOCKERHUB_CREDENTIALS_USR}"
                         echo "Building Docker Image with tag: ${DOCKER_IMAGE}:${counter}"
