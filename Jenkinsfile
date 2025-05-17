@@ -24,7 +24,12 @@ pipeline {
                     sh "sudo docker ps -a"
                     sh "sudo docker images ls -a"
                     sh "whoami"
+                    echo ${DOCKERHUB_CREDENTIALS_USR}
+                    echo ${DOCKERHUB_CREDENTIALS_PSW}
                     echo "Im here"
+
+
+                    
                     echo "Stopping and removing any old container named java_container"
                     sh "docker stop java_container || true"
                     sh "docker rm java_container || true"
