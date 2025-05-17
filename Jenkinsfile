@@ -22,11 +22,11 @@ pipeline {
             steps {
                 script {
                     echo "Stopping and removing any old container named java_container"
-                    sh "sudo docker stop java_container || true"
-                    sh "sudo docker rm java_container || true"
+                    sh "docker stop java_container || true"
+                    sh "docker rm java_container || true"
 
                     echo "Removing old Docker image if it exists"
-                    sh "sudo docker rmi ${DOCKER_IMAGE} || true"
+                    sh "docker rmi ${DOCKER_IMAGE} || true"
 
                     // Initialize and read build counter
                     def counter = 1
@@ -42,11 +42,11 @@ pipeline {
                         echo "Dockerhub Username: ${DOCKERHUB_CREDENTIALS_USR}"
                         echo "Building Docker Image with tag: ${DOCKER_IMAGE}:${counter}"
 
-                        sudo docker build -t ${DOCKER_IMAGE}:${counter} .
+                        docker build -t ${DOCKER_IMAGE}:${counter} .
 
                         echo "Pushing image to DockerHub..."
-                        sudo docker login -u "${DOCKERHUB_CREDENTIALS_USR}" -p "${DOCKERHUB_CREDENTIALS_PSW}"
-                        sudo docker push ${DOCKER_IMAGE}:${counter}
+                        docker login -u "${DOCKERHUB_CREDENTIALS_USR}" -p "${DOCKERHUB_CREDENTIALS_PSW}"
+                        docker push ${DOCKER_IMAGE}:${counter}
                     """
 
                     // Save updated counter for reuse in Deploy stage
