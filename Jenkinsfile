@@ -78,6 +78,12 @@ pipeline {
                 script {
                     env.IMAGE_TAG = readFile('counter.txt').trim()
                 }
+                sh """
+                    sudo yum -y install docker
+                    sudo systemctl start docker
+                    sudo systemctl enable docker
+                    sudo systemctl status docker --no-pager
+                """
                 echo "Deploying Docker image: ${DOCKER_IMAGE}:${env.IMAGE_TAG}"
                 sh """
                     sudo docker run -itd -p 8081:8080 --name java_container ${DOCKER_IMAGE}:${env.IMAGE_TAG}
