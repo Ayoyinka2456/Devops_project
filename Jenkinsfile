@@ -26,8 +26,9 @@ pipeline {
                     sh "sudo docker ps -a"
                     sh "sudo docker images ls -a"
                     sh "whoami"
-                    echo ${DOCKERHUB_CREDENTIALS_USR}
-                    echo ${DOCKERHUB_CREDENTIALS_PSW}
+                    echo "${DOCKERHUB_CREDENTIALS_USR}"
+                    echo "${DOCKERHUB_CREDENTIALS_PSW}"
+
                     echo "Im here"
 
 
@@ -63,6 +64,7 @@ pipeline {
 
                     // Save updated counter for reuse in Deploy stage
                     writeFile file: 'counter.txt', text: counter.toString()
+                    stash includes: 'counter.txt', name: 'counter-file'
                 }
             }
         }
@@ -72,6 +74,7 @@ pipeline {
                 label 'Tomcat'  // Run this stage on a Tomcat-labeled agent
             }
             steps {
+                unstash 'counter-file'
                 script {
                     env.IMAGE_TAG = readFile('counter.txt').trim()
                 }
