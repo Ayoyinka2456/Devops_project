@@ -20,15 +20,30 @@ pipeline {
             }
         }
 
+        stage('Restore Counter') {
+            steps {
+                script {
+                    echo "Looking for archived counter.txt from previous build..."
+                    copyArtifacts(
+                        projectName: env.JOB_NAME,
+                        selector: [$class: 'StatusBuildSelector', stable: true],
+                        filter: 'counter.txt',
+                        optional: true
+                    )
+                }
+            }
+        }
         stage('Dockerize') {
             steps {
                 script {
+                    def counterFile = "${env.WORKSPACE}/counter.txt"
                     def counter = 0
-                    try {
-                        counter = readFile('counter.txt').toInteger()
-                        echo "Read existing counter: ${counter}"
-                    } catch (Exception e) {
-                        echo "No counter file found. Starting from 0."
+                    // If file exists, read and increment
+                    if (fileExists(counterFile)) {
+                        counter = readFile(counterFile).trim().toInteger()
+                        echo "Incremented counter: ${counter}"
+                    } else {
+                        echo "No existing counter file. Starting at 0."
                     }
 
                     def imageTag = "${DOCKER_IMAGE}:${counter}"
@@ -44,6 +59,7 @@ pipeline {
                     stash includes: 'counter.txt', name: 'counter-file'
 
                     // Increment only after success
+                    // Save tag and persist counter
                     writeFile file: 'counter.txt', text: (counter + 1).toString()
                 }
             }
@@ -79,8 +95,17 @@ pipeline {
         }
 
     }
+    post {
+        success {
+            archiveArtifacts artifacts: 'counter.txt', fingerprint: true
+            echo "counter.txt archived for next build."
+        }
+    }
 }
 
+
+
+// ==========edited 5/20/25
 
 // COmmented out 5/20/25
 // They worked...simply expanding functionality
