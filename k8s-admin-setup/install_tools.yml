@@ -1,0 +1,13 @@
+#install tools yml 
+
+---
+- name: Install Kubernetes Admin Tools
+  hosts: localhost
+  connection: local
+  become: yes
+
+  roles:
+    - awscli
+    - kubectl
+    - kops
+    - docker
