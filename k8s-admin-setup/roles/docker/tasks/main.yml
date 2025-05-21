@@ -11,20 +11,10 @@
     name: git
     state: present
 
-- name: Enable Amazon Corretto 17
-  shell: amazon-linux-extras enable corretto17
-  args:
-    creates: /etc/yum.repos.d/amzn2-extras.repo
-
-- name: Install Java 17 (Amazon Corretto)
+- name: Install Amazon Corretto 17 (Java 17)
   yum:
     name: java-17-amazon-corretto
     state: present
-
-- name: Enable Docker
-  shell: amazon-linux-extras enable docker
-  args:
-    creates: /etc/yum.repos.d/amzn2-extras.repo
 
 - name: Install Docker
   yum:
@@ -56,4 +46,3 @@
   shell: source /home/ec2-user/.bashrc
   args:
     executable: /bin/bash
-
