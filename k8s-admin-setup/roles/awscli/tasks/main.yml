@@ -4,7 +4,6 @@
   package:
     name:
       - unzip
-      - curl
     state: present
 
 - name: Download AWS CLI installer
