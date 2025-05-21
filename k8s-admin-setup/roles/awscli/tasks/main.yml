@@ -1,0 +1,22 @@
+#aws-cli-install yml  roles/awscli/tasks/main.yml
+---
+- name: Install unzip and curl
+  package:
+    name:
+      - unzip
+      - curl
+    state: present
+
+- name: Download AWS CLI installer
+  get_url:
+    url: https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip
+    dest: /tmp/awscliv2.zip
+
+- name: Unpack AWS CLI
+  unarchive:
+    src: /tmp/awscliv2.zip
+    dest: /tmp
+    remote_src: yes
+
+- name: Run AWS CLI install script
+  command: /tmp/aws/install
