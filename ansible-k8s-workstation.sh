@@ -13,4 +13,4 @@ kops create cluster \
   --node-count=2 \
   --node-size=t2.medium \
   --control-plane-size=t2.medium \
-  --ssh-public-key="s3://final-project-1-k8s-store/kops-key.pub"
+  --ssh-public-key="~/.ssh/id_rsa.pub"
