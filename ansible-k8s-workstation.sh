@@ -2,7 +2,7 @@ ssh-keygen -t rsa -b 4096 -f ~/.ssh/id_rsa -C "kops-key"
 aws s3 cp ~/.ssh/id_rsa.pub s3://final-project-1-k8s-store/kops-key.pub
 
 cd k8s-admin-setup
-ansible-playbook -i host.ini install-tools.yml
+ansible-playbook -i host.ini install_tools.yml
 
 #create cluster
 
