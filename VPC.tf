@@ -184,17 +184,17 @@ resource "aws_s3_bucket" "final-project-1-k8s-store" {
   }
 }
 
-resource "aws_route53_zone" "final_project_1_k8s_cluster_local" {
-  name = "final-project-1-k8s-cluster.local"
+# resource "aws_route53_zone" "final_project_1_k8s_cluster_local" {
+#   name = "final-project-1-k8s-cluster.local"
 
-  vpc {
-    vpc_id = aws_vpc.final-project-1-vpc.id
-  }
+#   vpc {
+#     vpc_id = aws_vpc.final-project-1-vpc.id
+#   }
 
-  comment = "Private hosted zone for Kubernetes cluster"
+#   comment = "Private hosted zone for Kubernetes cluster"
 
-  tags = {
-    Name        = "final-project-1 k8s-cluster.local"
-    Environment = "dev"
-  }
-}
+#   tags = {
+#     Name        = "final-project-1 k8s-cluster.local"
+#     Environment = "dev"
+#   }
+# }
