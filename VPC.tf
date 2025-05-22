@@ -54,12 +54,12 @@ resource "aws_route_table" "final-project-1-public-RT" {
   }
 }
 # SUBNET - ROUTE TABLE ASSOCIATION -PUBLIC
-resource "aws_route_table_association" "final-project-1-public-asc" {
+resource "aws_route_table_association" "final-project-1-public-asc-2a" {
   subnet_id      = aws_subnet.final-project-1-public-subnet-2a.id
   route_table_id = aws_route_table.final-project-1-public-RT.id
 }
 
-resource "aws_route_table_association" "final-project-1-public-asc" {
+resource "aws_route_table_association" "final-project-1-public-asc-2b" {
   subnet_id      = aws_subnet.final-project-1-public-subnet-2b.id
   route_table_id = aws_route_table.final-project-1-public-RT.id
 }
@@ -109,7 +109,7 @@ resource "aws_security_group" "final-project-1-ALL-SG" {
 
 # 1. Create IAM Role
 resource "aws_iam_role" "final-project-1-ec2-role" {
-  name = "final-project-1 ec2-role"
+  name = "final-project-1-ec2-role"
 
   assume_role_policy = jsonencode({
     Version = "2012-10-17"
@@ -131,7 +131,7 @@ resource "aws_iam_role_policy_attachment" "final-project-1-ec2-role-admin-access
 
 # 3. Create IAM Instance Profile
 resource "aws_iam_instance_profile" "final-project-1-ec2-instance-profile" {
-  name = "final-project-1 ec2-instance-profile"
+  name = "final-project-1-ec2-instance-profile"
   role = aws_iam_role.final-project-1-ec2-role.name
 }
 
