@@ -1,0 +1,39 @@
+---
+- name: Generate SSH key and upload public key to S3
+  hosts: k8s-workstation
+  become: true
+  gather_facts: no
+
+  vars:
+    ssh_user: ec2-user
+    ssh_key_name: id_rsa
+    ssh_key_path: "/home/{{ ssh_user }}/.ssh/{{ ssh_key_name }}"
+    ssh_key_comment: "kops-key"
+    s3_bucket: "final-project-1-k8s-store"
+    s3_key_path: "kops-key.pub"
+
+  tasks:
+    - name: Generate SSH key pair using ssh-keygen
+      shell: |
+        ssh-keygen -t rsa -b 4096 -f "{{ ssh_key_path }}" -C "{{ ssh_key_comment }}" -N ""
+      args:
+        creates: "{{ ssh_key_path }}"
+      become_user: "{{ ssh_user }}"
+
+    - name: Ensure permissions are correct on private key
+      file:
+        path: "{{ ssh_key_path }}"
+        owner: "{{ ssh_user }}"
+        group: "{{ ssh_user }}"
+        mode: "0600"
+
+    - name: Upload public key to S3
+      amazon.aws.aws_s3:
+        bucket: "{{ s3_bucket }}"
+        object: "{{ s3_key_path }}"
+        src: "{{ ssh_key_path }}.pub"
+        mode: put
+
+    - name: Show confirmation
+      debug:
+        msg: "SSH public key uploaded to s3://{{ s3_bucket }}/{{ s3_key_path }}"
