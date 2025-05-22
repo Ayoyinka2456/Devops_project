@@ -14,7 +14,7 @@
           --topology=public \
           --networking=calico \
           --network-cidr=10.0.0.0/20 \
-          --subnets=us-east-2a,us-east-2b \
+          --subnets=10.0.1.0/24,10.0.2.0/24 \
           --node-size=t2.medium \
           --control-plane-size=t2.medium \
           --node-count=2 \
