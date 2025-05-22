@@ -10,3 +10,4 @@
     - kubectl
     - kops
     - docker
+    - amazon_aws_setup
