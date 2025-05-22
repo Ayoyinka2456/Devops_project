@@ -2,8 +2,7 @@
 
 ---
 - name: Install Kubernetes Admin Tools
-  hosts: localhost
-  connection: local
+  hosts: k8s-workstation
   become: yes
 
   roles:
