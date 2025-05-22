@@ -1,4 +1,3 @@
-# create-k8s-cluster.yml
 ---
 - name: Create Kubernetes Cluster with kOps
   hosts: k8s-workstation
@@ -7,15 +6,11 @@
     - name: Run kops create cluster
       shell: |
         kops create cluster \
-          --name=final-project-1-k8s-cluster.local \
           --state=s3://final-project-1-k8s-store \
-          --cloud=aws \
           --zones=us-east-2a,us-east-2b \
-          --topology=public \
-          --networking=calico \
-          --network-cidr=10.0.0.0/20 \
-          --subnets=10.0.1.0/24,10.0.2.0/24 \
+          --node-count=2 \
+          --name=final-project-1.k8s.local \
           --node-size=t2.medium \
           --control-plane-size=t2.medium \
-          --node-count=2 \
-          --ssh-public-key=~/.ssh/id_rsa.pub
+          --networking=calico \
+          --yes
