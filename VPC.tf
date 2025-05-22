@@ -177,7 +177,7 @@ resource "aws_instance" "final-project-1-K8s-workstation" {
 
 # 5. Create S3 Bucket for K8s Store
 resource "aws_s3_bucket" "final-project-1-k8s-store" {
-  bucket = "final-project-1 k8s-store"
+  bucket = "final-project-1-k8s-store"
   tags = {
     Name        = "final-project-1-k8s-store"
     Environment = "Production"
@@ -185,7 +185,7 @@ resource "aws_s3_bucket" "final-project-1-k8s-store" {
 }
 
 resource "aws_route53_zone" "final_project_1_k8s_cluster_local" {
-  name = "final-project-1 k8s-cluster.local"
+  name = "final-project-1-k8s-cluster.local"
 
   vpc {
     vpc_id = aws_vpc.final-project-1-vpc.id
