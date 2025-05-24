@@ -10,4 +10,5 @@
     - kubectl
     - kops
     - docker
+    - python_jinja
 #    - amazon_aws_setup
