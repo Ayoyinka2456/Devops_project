@@ -17,7 +17,7 @@ with open('project_deployment.yml', 'w') as f:
 
 
 # How to run j2 
-# python render.py 3
+# python3 render.py 3
 # this creates the deployment.yml
 
 
