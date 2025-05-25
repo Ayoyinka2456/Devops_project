@@ -184,3 +184,18 @@ resource "aws_s3_bucket" "final-project-1-k8s-store" {
     Environment = "Production"
   }
 }
+
+
+
+#To automate ANsible-master and K8s-workstation
+
+output "ansible_master_public_ip" {
+  value = aws_instance.final-project-1-Ansible-Master.public_ip
+  description = "Public IP of Ansible Master"
+}
+
+output "k8s_workstation_public_ip" {
+  value = aws_instance.final-project-1-K8s-workstation.public_ip
+  description = "Public IP of K8s Workstation"
+}
+
