@@ -15,11 +15,14 @@
     - name: Apply the Kubernetes deployment
       shell: |      
         kops export kubecfg --name=final-project-1.k8s.local --state=s3://final-project-1-k8s-store
-        sudo kubectl apply -f /home/ec2-user/project_deployment.yml
+        mkdir -p /home/ec2-user/.kube
+        chown -R ec2-user:ec2-user /home/ec2-user/.kube
+        chown ec2-user:ec2-user /home/ec2-user/.kube/config
+        until kops validate cluster --name=final-project-1.k8s.local --state=s3://final-project-1-k8s-store; do echo "Waiting for cluster..."; sleep 30; done
+        kubectl apply -f /home/ec2-user/project_deployment.yml
         sleep 600
-        sudo kops validate cluster --name=final-project-1.k8s.local --state=s3://final-project-1-k8s-store
-        sudo kubectl get deployments
-        sudo kubectl get service
-        sudo kubectl get pods
+        kubectl get deployments
+        kubectl get service
+        kubectl get pods
       args:
         executable: /bin/bash
