@@ -154,10 +154,10 @@ cd /home/ec2-user/k8s-admin-setup/
 chmod 400 devops_1.pem
 chmod +x install_python3.sh
 ./install_python3.sh
-python3 render.py
 
 ansible-playbook -i host.ini 01-* && \
 sleep 30 && \
+python3 render.py
 ansible-playbook -i host.ini 02-* && \
 ansible-playbook -i host.ini 03-* && \
 ansible-playbook -i host.ini 04-*
