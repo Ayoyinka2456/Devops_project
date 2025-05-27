@@ -158,6 +158,7 @@ chmod +x install_python3.sh
 ansible-playbook -i host.ini 01-* && \
 sleep 30 && \
 python3 render.py
+ls -la
 ansible-playbook -i host.ini 02-* && \
 ansible-playbook -i host.ini 03-* && \
 ansible-playbook -i host.ini 04-*
