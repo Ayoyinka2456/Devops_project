@@ -117,6 +117,9 @@ pipeline {
                       cd Devops_project
                       terraform destroy -auto-approve && rm -f terraform.lock.hcl terraform.tfstate terraform.tfstate.backup
                       sleep 60
+                      cd ../ && rm -rf Devops_project
+                      git clone -b project-3 https://github.com/Ayoyinka2456/Devops_project.git
+                      cd Devops_project
                     else
                       echo "Devops_project directory does not exist"
                       git clone -b project-3 https://github.com/Ayoyinka2456/Devops_project.git
@@ -136,11 +139,11 @@ pipeline {
 
                     chmod 400 k8s-admin-setup/devops_1.pem
 
-                    scp -o StrictHostKeyChecking=no -i "/home/ec2-user/Devops_project/k8s-admin-setup/devops_1.pem" -r /home/ec2-user/Devops_project/k8s-admin-setup ec2-user@\${ANSIBLE_IP}:/home/ec2-user/
-                    scp -o StrictHostKeyChecking=no -i "/home/ec2-user/Devops_project/k8s-admin-setup/devops_1.pem" \${WORKSPACE}/counter.txt ec2-user@\${ANSIBLE_IP}:/home/ec2-user/
+                    scp -o StrictHostKeyChecking=no -i "k8s-admin-setup/devops_1.pem" -r \${WORKSPACE}/Devops_project/k8s-admin-setup ec2-user@\${ANSIBLE_IP}:/home/ec2-user/
+                    scp -o StrictHostKeyChecking=no -i "k8s-admin-setup/devops_1.pem" \${WORKSPACE}/counter.txt ec2-user@\${ANSIBLE_IP}:/home/ec2-user/
 
                     echo "SSHing into Ansible-Master for setup..."
-                    ssh -i "/home/ec2-user/Devops_project/k8s-admin-setup/devops_1.pem" -o StrictHostKeyChecking=no ec2-user@\${ANSIBLE_IP} <<'ENDSSH'
+                    ssh -i "k8s-admin-setup/devops_1.pem" -o StrictHostKeyChecking=no ec2-user@\${ANSIBLE_IP} <<'ENDSSH'
 sudo yum -y install epel-release
 sudo yum -y install ansible
 ansible --version
