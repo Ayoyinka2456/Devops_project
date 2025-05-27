@@ -1,7 +1,7 @@
 from jinja2 import Environment, FileSystemLoader
 
 # Read the counter value from counter.txt
-with open('../counter.txt') as f:
+with open('counter.txt') as f:
     counter = f.read().strip()
 
 # Set up Jinja2 environment
