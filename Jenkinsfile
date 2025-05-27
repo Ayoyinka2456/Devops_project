@@ -121,7 +121,7 @@ pipeline {
                     }
                     // END ADDED CLEANUP BLOCK
         
-                    sh """
+                    sh '''
                         echo "Entering Terraform"
                         if [ -d "Devops_project" ]; then
                             cd Devops_project
@@ -163,7 +163,7 @@ pipeline {
                             ansible-playbook -i host.ini 03-* && \
                             ansible-playbook -i host.ini 04-*
                         ENDSSH
-                    """
+                    '''
                 }
             }
         }
