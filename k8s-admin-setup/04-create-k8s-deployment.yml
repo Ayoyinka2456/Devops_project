@@ -20,9 +20,6 @@
         chown ec2-user:ec2-user /home/ec2-user/.kube/config
         until kops validate cluster --name=final-project-1.k8s.local --state=s3://final-project-1-k8s-store; do echo "Waiting for cluster..."; sleep 30; done
         kubectl apply -f /home/ec2-user/project_deployment.yml
-        sleep 600
-        kubectl get deployments
-        kubectl get service
-        kubectl get pods
+        sleep 300
       args:
         executable: /bin/bash
