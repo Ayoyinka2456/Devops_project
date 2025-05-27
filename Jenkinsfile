@@ -96,33 +96,31 @@ pipeline {
             }
             steps {
                 unstash 'counter-file'
-
+        
                 script {
                     env.IMAGE_TAG = readFile('counter.txt').trim()
-
+        
                     // BEGIN ADDED CLEANUP BLOCK
-                    script {
-                        if (fileExists('K8S_IP.txt')) {
-                            env.K8S_IP = readFile('K8S_IP.txt').trim()
-                            echo "Loaded previous K8S_IP: ${env.K8S_IP}"
-                    
-                            sh """
-                                echo "Cleaning up previous K8s workstation..."
-                                ssh -o StrictHostKeyChecking=no -i Devops_project/k8s-admin-setup/devops_1.pem ec2-user@${env.K8S_IP} <<'ENDSSH'
-                                    echo "Connected to K8s workstation: \$(hostname)"
-                                    if command -v kubectl &> /dev/null; then
-                                        kubectl delete all --all || true
-                                    else
-                                        echo "kubectl not found on remote instance."
-                                    fi
-                                ENDSSH
-                            """
-                        } else {
-                            echo "No K8S_IP.txt found, skipping K8s cleanup."
-                        }
+                    if (fileExists('K8S_IP.txt')) {
+                        env.K8S_IP = readFile('K8S_IP.txt').trim()
+                        echo "Loaded previous K8S_IP: ${env.K8S_IP}"
+        
+                        sh """
+                            echo "Cleaning up previous K8s workstation..."
+                            ssh -o StrictHostKeyChecking=no -i Devops_project/k8s-admin-setup/devops_1.pem ec2-user@${env.K8S_IP} <<'ENDSSH'
+                                echo "Connected to K8s workstation: \$(hostname)"
+                                if command -v kubectl &> /dev/null; then
+                                    kubectl delete all --all || true
+                                else
+                                    echo "kubectl not found on remote instance."
+                                fi
+                            ENDSSH
+                        """
+                    } else {
+                        echo "No K8S_IP.txt found, skipping K8s cleanup."
                     }
                     // END ADDED CLEANUP BLOCK
-
+        
                     sh """
                         echo "Entering Terraform"
                         if [ -d "Devops_project" ]; then
@@ -139,21 +137,21 @@ pipeline {
                         terraform init
                         terraform apply -auto-approve
                         sleep 300
-
+        
                         ANSIBLE_IP=$(terraform output -raw ansible_master_public_ip)
                         K8S_IP=$(terraform output -raw k8s_workstation_public_ip)
-
+        
                         echo "$ANSIBLE_IP" > ANSIBLE_IP.txt
                         echo "$K8S_IP" > K8S_IP.txt
                         chmod 400 k8s-admin-setup/devops_1.pem
-
+        
                         scp -o StrictHostKeyChecking=no -i k8s-admin-setup/devops_1.pem -r ${WORKSPACE}/Devops_project/k8s-admin-setup ec2-user@${ANSIBLE_IP}:/home/ec2-user/
                         scp -o StrictHostKeyChecking=no -i k8s-admin-setup/devops_1.pem ${WORKSPACE}/counter.txt ec2-user@${ANSIBLE_IP}:/home/ec2-user/k8s-admin-setup
-
+        
                         ssh -i "k8s-admin-setup/devops_1.pem" -o StrictHostKeyChecking=no ec2-user@${ANSIBLE_IP} <<'ENDSSH'
                             sudo yum -y install epel-release
                             sudo yum -y install ansible
-                            export counter=$(xargs < counter.txt)
+                            export counter=\$(xargs < counter.txt)
                             cd /home/ec2-user/k8s-admin-setup/
                             chmod 400 devops_1.pem
                             chmod +x install_python3.sh
@@ -169,7 +167,7 @@ pipeline {
                 }
             }
         }
-    }
+
 
     post {
         success {
