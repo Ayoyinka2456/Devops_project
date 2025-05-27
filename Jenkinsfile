@@ -140,7 +140,7 @@ pipeline {
                     chmod 400 k8s-admin-setup/devops_1.pem
 
                     scp -o StrictHostKeyChecking=no -i "k8s-admin-setup/devops_1.pem" -r \${WORKSPACE}/Devops_project/k8s-admin-setup ec2-user@\${ANSIBLE_IP}:/home/ec2-user/
-                    scp -o StrictHostKeyChecking=no -i "k8s-admin-setup/devops_1.pem" \${WORKSPACE}/counter.txt ec2-user@\${ANSIBLE_IP}:/home/ec2-user/
+                    scp -o StrictHostKeyChecking=no -i "k8s-admin-setup/devops_1.pem" \${WORKSPACE}/counter.txt ec2-user@\${ANSIBLE_IP}:/home/ec2-user/k8s-admin-setup
 
                     echo "SSHing into Ansible-Master for setup..."
                     ssh -i "k8s-admin-setup/devops_1.pem" -o StrictHostKeyChecking=no ec2-user@\${ANSIBLE_IP} <<'ENDSSH'
