@@ -291,13 +291,13 @@ pipeline {
                         sh '''
                             echo "Cleaning up previous K8s workstation..."
                             ssh -o StrictHostKeyChecking=no -i Devops_project/k8s-admin-setup/devops_1.pem ec2-user@${K8S_IP} <<'ENDSSH'
-                                echo "Connected to K8s workstation: $(hostname)"
-                                if command -v kubectl &> /dev/null; then
-                                    kubectl delete all --all || true
-                                else
-                                    echo "kubectl not found on remote instance."
-                                fi
-                            ENDSSH
+echo "Connected to K8s workstation"
+if command -v kubectl &> /dev/null; then
+    kubectl delete all --all || true
+else
+    echo "kubectl not found on remote instance."
+fi
+ENDSSH
                         '''
                     } else {
                         echo "No K8S_IP.txt found, skipping K8s cleanup."
@@ -332,20 +332,20 @@ pipeline {
                         scp -o StrictHostKeyChecking=no -i k8s-admin-setup/devops_1.pem ${WORKSPACE}/counter.txt ec2-user@${ANSIBLE_IP}:/home/ec2-user/k8s-admin-setup
 
                         ssh -i "k8s-admin-setup/devops_1.pem" -o StrictHostKeyChecking=no ec2-user@${ANSIBLE_IP} <<'ENDSSH'
-                            sudo yum -y install epel-release
-                            sudo yum -y install ansible
-                            export counter=$(xargs < counter.txt)
-                            cd /home/ec2-user/k8s-admin-setup/
-                            chmod 400 devops_1.pem
-                            chmod +x install_python3.sh
-                            ./install_python3.sh
-                            ansible-playbook -i host.ini 01-* && \
-                            sleep 30 && \
-                            python3 render.py
-                            ansible-playbook -i host.ini 02-* && \
-                            ansible-playbook -i host.ini 03-* && \
-                            ansible-playbook -i host.ini 04-*
-                        ENDSSH
+sudo yum -y install epel-release
+sudo yum -y install ansible
+export counter=$(xargs < counter.txt)
+cd /home/ec2-user/k8s-admin-setup/
+chmod 400 devops_1.pem
+chmod +x install_python3.sh
+./install_python3.sh
+ansible-playbook -i host.ini 01-* && \
+sleep 30 && \
+python3 render.py
+ansible-playbook -i host.ini 02-* && \
+ansible-playbook -i host.ini 03-* && \
+ansible-playbook -i host.ini 04-*
+ENDSSH
                     '''
                 }
             }
