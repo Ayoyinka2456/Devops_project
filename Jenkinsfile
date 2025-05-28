@@ -293,7 +293,7 @@ pipeline {
                             ssh -o StrictHostKeyChecking=no -i Devops_project/k8s-admin-setup/devops_1.pem ec2-user@${K8S_IP} <<'ENDSSH'
 echo "Connected to K8s workstation"
 if command -v kubectl &> /dev/null; then
-    kubectl delete all --all || true
+    sudo kubectl delete all --all || true
     sleep 180
 else
     echo "kubectl not found on remote instance."
