@@ -292,11 +292,12 @@ pipeline {
                             echo "Cleaning up previous K8s workstation..."
                             ssh -o StrictHostKeyChecking=no -i Devops_project/k8s-admin-setup/devops_1.pem ec2-user@${K8S_IP} <<'ENDSSH'
 echo "Connected to K8s workstation"
-if command -v kubectl &> /dev/null; then
-    sudo kubectl delete all --all || true
+if command -v kops &> /dev/null; then
+    export KOPS_STATE_STORE=s3://final-project-1-k8s-store
+    kops delete cluster --name=final-project-1.k8s.local --yes || true
     sleep 180
 else
-    echo "kubectl not found on remote instance."
+    echo "kops not found on remote instance."
 fi
 ENDSSH
                         '''
