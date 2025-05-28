@@ -284,8 +284,8 @@ pipeline {
                     env.IMAGE_TAG = readFile('counter.txt').trim()
 
                     // BEGIN ADDED CLEANUP BLOCK
-                    if (fileExists('K8S_IP.txt')) {
-                        env.K8S_IP = readFile('K8S_IP.txt').trim()
+                    if (fileExists('Devops_project/K8S_IP.txt')) {
+                        env.K8S_IP = readFile('Devops_project/K8S_IP.txt').trim()
                         echo "Loaded previous K8S_IP: ${env.K8S_IP}"
 
                         sh '''
@@ -294,6 +294,7 @@ pipeline {
 echo "Connected to K8s workstation"
 if command -v kubectl &> /dev/null; then
     kubectl delete all --all || true
+    sleep 180
 else
     echo "kubectl not found on remote instance."
 fi
